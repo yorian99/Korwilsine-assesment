@@ -11,7 +11,6 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
-    /* (semua style Anda tetap sama – tidak berubah) */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Inter', sans-serif; color: #334155; scroll-behavior: smooth; background: #f8fafc; width: 100%; overflow-x: hidden; }
@@ -34,9 +33,10 @@
 <body class="bg-[#f8fafc] w-full">
   <div id="root" class="w-full min-h-screen flex flex-col"></div>
   <script type="text/babel">
-    // ----- KONFIGURASI BACKEND APPS SCRIPT -----
+    // ==================== KONFIGURASI BACKEND ====================
+    // Ganti URL ini dengan URL Apps Script Anda setelah deploy
     const BACKEND_URL = "https://script.google.com/macros/s/AKfycbx9dIBo8LWYGGI1hmlaIvuEUegfXKpW9nNHcMaaiS5BEGhTT0jFOUQ94tnu-xfmuhfNHQ/exec";
-    // -----------------------------------------
+    // ============================================================
 
     const { useState, useMemo, useEffect, useRef } = React;
     const Icon = ({ name, size = 18, className = "" }) => {
@@ -44,7 +44,7 @@
       return <i data-lucide={name} style={{ width: size, height: size }} className={className}></i>;
     };
 
-    // Helper fungsi fetch ke Apps Script
+    // Helper fetch ke backend
     async function fetchBackend(action, method = "GET", body = null) {
       let url = `${BACKEND_URL}?action=${action}`;
       const options = { method, headers: { "Content-Type": "application/json" } };
@@ -80,7 +80,7 @@
         return today > deadline;
       }, []);
 
-      // Ambil data awal dari backend
+      // Ambil data awal dari backend (Vercel -> Apps Script)
       useEffect(() => {
         Promise.all([
           fetchBackend("getStudents").then(res => res.data),
@@ -91,9 +91,9 @@
           if (tokenData && tokenData.length > 0) setSelectedDate(tokenData[0].tanggal);
           setIsDemoMode(false);
         }).catch(err => {
-          console.error("Gagal connect ke backend:", err);
+          console.error("Gagal konek ke backend:", err);
           setIsDemoMode(true);
-          // data demo
+          // Data demo jika offline
           setDbStudents([
             { nisn: '1234567890', nama: 'AHMAD FAUZAN', kelas: '6', rombel: 'SDN SINE 1 SINE' },
             { nisn: '1234567891', nama: 'SITI NURHALIZA', kelas: '6', rombel: 'SDN SINE 1 SINE' },
